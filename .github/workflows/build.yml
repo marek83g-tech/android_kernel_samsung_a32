@@ -25,8 +25,13 @@ jobs:
           
           make O=out clean
           make O=out a32_defconfig
-          # KLUCZOWA ZMIANA: Wymuszamy użycie GCC zamiast szukania Clanga
           make O=out -j$(nproc --all) \
             CC=aarch64-linux-android-gcc \
             HOSTCC=gcc \
             KCFLAGS="-w -fno-stack-protector"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Kernel-A32-4G
+          path: out/arch/arm64/boot/Image.gz-dtb
