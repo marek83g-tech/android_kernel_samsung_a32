@@ -1,3 +1,7 @@
+name: Build Kernel A32 4G
+on:
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -31,3 +35,9 @@ jobs:
             CC=$TOOLCHAIN64/aarch64-linux-android-gcc \
             LD=$TOOLCHAIN64/aarch64-linux-android-ld \
             KCFLAGS="-w -fno-stack-protector"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Kernel-A32-4G
+          path: out/arch/arm64/boot/Image.gz-dtb
