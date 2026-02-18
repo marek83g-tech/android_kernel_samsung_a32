@@ -1,7 +1,3 @@
-name: Build Kernel A32 4G
-on:
-  workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -9,10 +5,11 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v3
 
-      - name: Install Dependencies
+      - name: Install 32-bit Libraries
         run: |
+          sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install -y bc build-essential flex bison libssl-dev libelf-dev libncurses5
+          sudo apt-get install -y bc build-essential flex bison libssl-dev libelf-dev libncurses5 libc6:i386 libncurses5:i386 libstdc++6:i386
 
       - name: Setup Toolchain
         run: |
@@ -34,9 +31,3 @@ jobs:
             CC=$TOOLCHAIN64/aarch64-linux-android-gcc \
             LD=$TOOLCHAIN64/aarch64-linux-android-ld \
             KCFLAGS="-w -fno-stack-protector"
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Kernel-A32-4G
-          path: out/arch/arm64/boot/Image.gz-dtb
